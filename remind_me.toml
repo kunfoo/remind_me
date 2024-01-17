@@ -1,0 +1,17 @@
+[config]
+email = "someone@some.tld"
+
+[event.test1]
+date = 2024-01-24
+age_unknown = true
+birthday = true
+remind_before = [ 7, 30 ]
+
+[event.test]
+date = 1900-01-17
+
+[event.example]
+message = "one example"
+date = 2023-01-17
+remind_before = [ 7, 30 ]
+birthday = true
