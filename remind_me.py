@@ -4,8 +4,10 @@ import logging
 from datetime import date, timedelta
 from smtplib import SMTP
 
+
 CONFIG = "remind_me.toml"
 TODAY = date.today()
+
 
 class Event:
     def __init__(self, title: str, raw_event: dict):
@@ -60,6 +62,7 @@ def main():
             server.sendmail(email_from, email_to, msg)
 
     exit(0)
+
 
 if __name__ == "__main__":
     main()
