@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-import tomli
+import tomllib
 import logging
 from datetime import date, timedelta
+from smtplib import SMTP
 
 CONFIG = "remind_me.toml"
 TODAY = date.today()
@@ -39,7 +40,7 @@ class Event:
 
 def main():
     with open(CONFIG, "rb") as f:
-        config = tomli.load(f)
+        config = tomllib.load(f)
 
     todays_events = []
     all_events = config["event"]
@@ -49,7 +50,14 @@ def main():
         if new_event.is_today():
             todays_events.append(new_event)
 
-    print(todays_events)
+    email_from = "Reminder"
+    email_to = config["config"]["email"]
+    email_hdr = "From: Reminder\r\nSubject:"
+
+    with SMTP("localhost") as server:
+        for event in todays_events:
+            msg = f"{email_hdr} {event}"
+            server.sendmail(email_from, email_to, msg)
 
     exit(0)
 
