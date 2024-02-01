@@ -6,6 +6,7 @@ A little python script that reads events from a TOML file and sends remind messa
 """
 authors = [{name = "katze", email = "katze@kunfoo.org"}]
 readme = "README.md"
+license = {file = "LICENSE"}
 dependencies = [
   "typer>=0.7.0",
 ]
