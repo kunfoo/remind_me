@@ -38,26 +38,24 @@ class Event:
         return False
 
 
-def main(config: str):
+def main(config: str, email: str):
     with open(config, "rb") as f:
         config = tomllib.load(f)
 
     todays_events = []
-    all_events = config["event"]
-    for event_title in all_events:
-        this_event = all_events[event_title]
+    for event_title in config:
+        this_event = config[event_title]
         new_event = Event(event_title, this_event)
         if new_event.is_today():
             todays_events.append(new_event)
 
     email_from = "Reminder"
-    email_to = config["config"]["email"]
     email_hdr = "From: Reminder\r\nSubject:"
 
     with SMTP("localhost") as server:
         for event in todays_events:
             msg = f"{email_hdr} {event}"
-            server.sendmail(email_from, email_to, msg)
+            server.sendmail(email_from, email, msg)
 
     exit(0)
 
