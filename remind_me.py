@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 import tomllib
 import logging
+import typer
 from datetime import date, timedelta
 from smtplib import SMTP
 
 
-CONFIG = "remind_me.toml"
-TODAY = date.today()
-
-
 class Event:
     def __init__(self, title: str, raw_event: dict):
+        self.today = date.today()
         self.date = raw_event["date"]
         self.message = raw_event.get("message", title)
         self.is_birthday = raw_event.get("birthday", False)
@@ -24,7 +22,7 @@ class Event:
 
         if self.is_birthday:
             if not self.age_unknown:
-                age = TODAY.year - self.date.year
+                age = self.today.year - self.date.year
                 self.message = f"{self.message} ({age})"
 
 
@@ -34,14 +32,14 @@ class Event:
 
     def is_today(self):
         for reminder in self.reminders:
-            if reminder.day == TODAY.day and reminder.month == TODAY.month:
+            if reminder.day == self.today.day and reminder.month == self.today.month:
                 return True
 
         return False
 
 
-def main():
-    with open(CONFIG, "rb") as f:
+def main(config: str):
+    with open(config, "rb") as f:
         config = tomllib.load(f)
 
     todays_events = []
@@ -65,4 +63,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)
