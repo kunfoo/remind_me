@@ -1,0 +1,14 @@
+[project]
+name = "remind_me"
+version = "1.0"
+description = """
+A little python script that reads events from a TOML file and sends remind messages via SMTP
+"""
+authors = [{name = "katze", email = "katze@kunfoo.org"}]
+readme = "README.md"
+dependencies = [
+  "typer>=0.9.0",
+]
+
+[project.urls]
+Repository = "https://github.com/kunfoo/remind_me.git"
