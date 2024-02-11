@@ -4,6 +4,10 @@ import logging
 import typer
 from datetime import date, timedelta
 from smtplib import SMTP
+from email.mime.text import MIMEText
+
+
+MAIL_FROM = "reminder@localhost"
 
 
 class Event:
@@ -26,7 +30,7 @@ class Event:
                 self.message = f"{self.message} ({age})"
 
 
-    def __repr__(self):
+    def __str__(self):
         return f"{self.date}: {self.message}"
 
 
@@ -38,7 +42,7 @@ class Event:
         return False
 
 
-def main(config: str, email: str):
+def main(config: str, mail_to: str):
     with open(config, "rb") as f:
         config = tomllib.load(f)
 
@@ -49,13 +53,14 @@ def main(config: str, email: str):
         if new_event.is_today():
             todays_events.append(new_event)
 
-    email_from = "Reminder"
-    email_hdr = "From: Reminder\r\nSubject:"
 
     with SMTP("localhost") as server:
         for event in todays_events:
-            msg = f"{email_hdr} {event}"
-            server.sendmail(email_from, email, msg)
+            email = MIMEText("")
+            email["From"] = MAIL_FROM
+            email["To"] = mail_to
+            email["Subject"] = str(event)
+            server.sendmail(MAIL_FROM, mail_to, email.as_string())
 
     exit(0)
 
